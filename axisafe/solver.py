@@ -192,7 +192,7 @@ class WaveElementAxisym(object):
                 if 'PML' in key:
                     PML_dofs.extend(val)
                     PML_elements.extend(self.Mesh.element_sets[key])
-                elif 'PML' not in key and len(core_sets) == 0:
+                elif 'PML' not in key and core_sets is None:
                     core_dofs.extend(val)
                     core_elements.extend(self.Mesh.element_sets[key])
             # since sets are not exclusive, the 'difference' between the

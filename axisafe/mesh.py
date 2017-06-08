@@ -11,8 +11,8 @@ from cmath import exp, pi
 import numpy as np
 import scipy.sparse as sps
 import matplotlib.pyplot as plt
-from shape_functions import build_GLL_quadrature, build_GLJ_quadrature
-import elements
+from axisafe.shape_functions import build_GLL_quadrature, build_GLJ_quadrature
+from . import elements as ElementLibrary
  
 def suggest_PML_parameters(PML_start, wavelenghts_within, waveguide_material,
                            surr_material, low_f, high_f, alpha=6, beta=7, att=1):

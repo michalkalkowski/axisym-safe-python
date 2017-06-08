@@ -8,7 +8,7 @@ from __future__ import print_function
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.interpolate import splrep, splev
-import shape_functions as shape_fun
+from . import shape_functions as shape_fun
 
 def gamma_PML(x, gamma, PML_start, PML_thk):
     """
@@ -145,7 +145,7 @@ class SLAX6(object):
                             shape_fun.line_spectral_GLL_lagrange(self.nodes_at)
 
         # extract the matrices and sum at each integration point
-        for i in len(ksis):
+        for i in range(len(ksis)):
 
             # shape funcion values at current location are NN[:, i]
             # generate the shape function matrix in standard form
@@ -290,7 +290,7 @@ class ALAX6(object):
                             shape_fun.line_spectral_GLL_lagrange(self.nodes_at)
 
         # extract the matrices and sum at each integration point
-        for i in len(ksis):
+        for i in range(len(ksis)):
 
             # shape funcion values at current location are NN[:, i]
             # generate the shape function matrix in standard form
@@ -806,9 +806,7 @@ class SLAX6_PML(object):
                             shape_fun.line_spectral_GLL_lagrange(self.nodes_at)
 
         # extract the matrices and sum at each integration point
-        for i in len(ksis):
-
-            #Nf, Nfr, detJ = shape_fun.Lin3Quad_N_diff(ksi, self.nodes_at)
+        for i in range(len(ksis)):
             # shape funcion values at current location are NN[:, i]
             # generate the shape function matrix in standard form
             diagonals = [[funct]*3 for funct in NN[:, i]]
@@ -960,7 +958,7 @@ class ALAX6_PML(object):
                             shape_fun.line_spectral_GLL_lagrange(self.nodes_at)
 
         # extract the matrices and sum at each integration point
-        for i in len(ksis):
+        for i in range(len(ksis)):
 
             # shape funcion values at current location are NN[:, i]
             # generate the shape function matrix in standard form
