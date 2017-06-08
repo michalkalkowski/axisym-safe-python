@@ -5,8 +5,13 @@ What is it?
 
 This repository contains the axisafe package which is an implementation of 
 the axisymmetric finite elements in Python, following a publication in 
-Computers & Structures. A few examples corresponding to the cases considered
-in the aforementioned paper are also included.
+Computers & Structures. The code can be used to find mechanical waves
+propagating axisymmetric structures, such as pipes. These can be free, buried
+or submerged, and may contain a fluid inside. An arbitrary composition of layers
+is allowed. 
+
+A few examples corresponding to the cases considered in the aforementioned paper
+are also included.
 
 License
 =======
