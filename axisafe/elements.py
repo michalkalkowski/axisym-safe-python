@@ -521,10 +521,10 @@ class SLAX6_core(object):
 
         # if the element is coupled to fluid elements - create the ingredients
         # of the coupling matrices
-        normal = np.array([1, 0, 0])
+        normal = np.array([1, 0, 0]).reshape(-1, 1)
         diagonals = [[funct]*3 for funct in NN[:, -1]]
         N_u = np.column_stack([np.diag(diagonal) for diagonal in diagonals])
-        self.Hs1 = 2*np.pi*N_u.T.dot(normal.reshape(-1, 1))*self.nodes_at[-1]
+        self.Hs1 = 2*np.pi*N_u.T.dot(normal)*self.nodes_at[-1]
 
         # apply the boundary conditions at the axis of symmetry
         if 0 in self.nodes_at:
