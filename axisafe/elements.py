@@ -209,11 +209,11 @@ class SLAX6(object):
 
         # if the element is coupled to fluid elements - create the ingredients
         # of the coupling matrices
-        normal = np.array([1, 0, 0])
+        normal = np.array([1, 0, 0]).reshape(-1, 1)
 
         diagonals = [[funct]*3 for funct in NN[:, 0]]
         N_u = np.column_stack([np.diag(diagonal) for diagonal in diagonals])
-        self.Hs0 = 2*np.pi*N_u.T.dot(normal.reshape(-1, 1))
+        self.Hs0 = 2*np.pi*N_u.T.dot(normal)
 
         diagonals = [[funct]*3 for funct in NN[:, -1]]
         N_u = np.column_stack([np.diag(diagonal) for diagonal in diagonals])

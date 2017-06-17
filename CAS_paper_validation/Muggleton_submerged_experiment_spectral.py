@@ -12,28 +12,26 @@ import matplotlib.pyplot as plt
 from scipy.io import loadmat
 plt.style.use('/home/michal/Dropbox/plot_templates/jsv.mplstyle')
 
-import SAFE_mesh as sm
-import SAFE_core
-import SAFE_plot
-import Misc
+from context import axisafe
 import Muggleton_Yan_model as Jens_model
+
 #%%
 lame_1, lame_2 = Misc.young2lame(2e9, 0.4)
 mdpe = [lame_1, lame_2, 900, 0.06]
 water = [2.25e9, 1000, 0]
 h_long, h_short, PML_order, R_s, R_l, R_sl = \
-        sm.suggest_PML_parameters(0.09, 3, mdpe, water, 1, 1e3, att=1)
+        axisafe.mesh.suggest_PML_parameters(0.09, 3, mdpe, water, 1, 1e3, att=1)
 
 sets = [['water', 0.0, 0.079, water, 'ALAX6'], 
         ['mdpe', 0.079, 0.011, mdpe, 'SLAX6'], 
         ['water_a', 0.09, np.round(h_short, 4), water, 'ALAX6_PML', PML_order]]
 f = np.linspace(1, 1000, 100, True)
 #%%
-mesh0 = sm.Mesh()
+mesh0 = axisafe.mesh.Mesh()
 mesh0.create(sets, f[-1], PML='water_a', PML_props=[0.09, np.round(h_short, 4), 6 + 7j])
 mesh0.assemble_matrices(n=0)
 
-pipe0 = SAFE_core.WaveElementAxisym(mesh0)
+pipe0 = axisafe.solver.WaveElementAxisym(mesh0)
 pipe0.solve(f)
 pipe0.energy_ratio()
 pipe0.k_propagating(15, 0.8)
@@ -42,11 +40,11 @@ k_0 = np.copy(pipe0.k_ready)
 sets = [['water', 0.0, 0.079, water, 'ALAX6'], 
         ['mdpe', 0.079, 0.011, mdpe, 'SLAX6']]
 
-mesh1 = sm.Mesh()
+mesh1 = axisafe.mesh.Mesh()
 mesh1.create(sets, f[-1])
 mesh1.assemble_matrices(n=0)
 
-pipe1 = SAFE_core.WaveElementAxisym(mesh1)
+pipe1 = axisafe.solver.WaveElementAxisym(mesh1)
 pipe1.solve(f)
 pipe1.energy_ratio()
 pipe1.k_propagating(15, 1)
