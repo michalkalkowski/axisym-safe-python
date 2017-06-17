@@ -309,10 +309,10 @@ class WaveElementAxisym(object):
         PML_dofs, PML_elements = [], []
         core_dofs, core_elements = [], []
         for key, val in self.Mesh.dofs_per_elset.items():
-            if 'PML' in key  and len(core_sets) == 0:
+            if 'PML' in key  and core_sets is None:
                 PML_dofs.extend(val)
                 PML_elements.extend(self.Mesh.element_sets[key])
-            if 'PML' not in key and len(core_sets) == 0:
+            if 'PML' not in key and core_sets is None:
                 core_dofs.extend(val)
                 core_elements.extend(self.Mesh.element_sets[key])
         # since sets are not exclusive, the 'difference' between the two lists is taken

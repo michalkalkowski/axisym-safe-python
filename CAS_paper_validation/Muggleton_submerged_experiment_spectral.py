@@ -16,7 +16,7 @@ from context import axisafe
 import Muggleton_Yan_model as Jens_model
 
 #%%
-lame_1, lame_2 = Misc.young2lame(2e9, 0.4)
+lame_1, lame_2 = axisafe.misc.young2lame(2e9, 0.4)
 mdpe = [lame_1, lame_2, 900, 0.06]
 water = [2.25e9, 1000, 0]
 h_long, h_short, PML_order, R_s, R_l, R_sl = \

@@ -12,20 +12,17 @@ import matplotlib.pyplot as plt
 from scipy.io import loadmat
 plt.style.use('/home/michal/Dropbox/plot_templates/jsv.mplstyle')
 
-import SAFE_mesh as sm
-import SAFE_core
-import SAFE_plot
-import Misc
+from context import axisafe
 import Muggleton_Yan_model as Jens_model
 #%%
-lame_1, lame_2 = Misc.young2lame(2e9, 0.4)
+lame_1, lame_2 = axisafe.misc.young2lame(2e9, 0.4)
 mdpe = [lame_1, lame_2, 900, 0.06]
-lame_1i, lame_2i = Misc.cLcS2lame(200, 100, 1500)
+lame_1i, lame_2i = axisafe.misc.cLcS2lame(200, 100, 1500)
 soil = [lame_1i, lame_2i, 1500, 0.]
 water = [2.25e9, 1000, 0]
 
 h_long, h_short, PML_order, R_s, R_l, R_sl = \
-        sm.suggest_PML_parameters(0.09, 3, mdpe, soil, 1, 1e3, att=1)
+        axisafe.mesh.suggest_PML_parameters(0.09, 3, mdpe, soil, 1, 1e3, att=1)
 
 sets = [['water', 0.0, 0.079, water, 'ALAX6'], 
         ['mdpe', 0.079, 0.011, mdpe, 'SLAX6'], 
@@ -33,56 +30,17 @@ sets = [['water', 0.0, 0.079, water, 'ALAX6'],
 
 f = np.linspace(1, 1000, 50, True)
 #%%
-mesh0 = sm.Mesh()
+mesh0 = axisafe.mesh.Mesh()
 mesh0.create(sets, f[-1], PML='soil', PML_props=[0.09, np.round(h_short, 4), 6 + 7j])
 mesh0.assemble_matrices(n=0)
 
-pipe0 = SAFE_core.WaveElementAxisym(mesh0)
+pipe0 = axisafe.solver.WaveElementAxisym(mesh0)
 pipe0.solve(f)
 pipe0.energy_ratio()
 pipe0.k_propagating(15, 0.935)
 k_0 = np.copy(pipe0.k_ready)
-#%%
-#%% compute the forced response
-r_f = 0.09
-theta_0 = 0.01
-forced_dof = 17
-f_ext = np.zeros(mesh0.no_of_dofs)
-f_ext[forced_dof] = -1
-     
-FRF = pipe0.calculate_frf(theta_0, r_f, f_ext, distance=0.1)[:, 17, :]
-pipe0.energy_velocity()
-
-a = pipe0.point_excited_waves(theta_0, r_f, f_ext).squeeze()[:, pipe0.propagating_indices]
-power_in_wave = pipe0.P*a*a.conj()
-#%%
-fig, (ax1, ax2) = plt.subplots(1, 2, sharex=True, figsize=(7.48, 3))
-ax1.semilogy(f, abs(FRF.sum(axis=1)), lw=3, c='gray')
-ax1.semilogy(f, abs(FRF[:, 1]))
-ax1.semilogy(f, abs(FRF[:, 2]), '--')
-ax1.set_xlabel('frequency in Hz')
-ax1.set_ylabel(r'$|u_r/F|$ in m/N')
-
-ax2.plot(f, 180/np.pi*np.unwrap(np.angle(FRF.sum(axis=1))), lw=3, c='gray')
-ax2.plot(f, 180/np.pi*np.unwrap(np.angle(FRF[:, 1])))
-ax2.plot(f, 180/np.pi*np.unwrap(np.angle(FRF[:, 2])), '--')
-ax2.set_xlabel('frequency in Hz')
-ax2.set_ylabel(r'angle$(u_r/F)$ in deg')
-ax1.legend(['total', 'axial', 'fluid'])
-plt.tight_layout()
-#plt.savefig('experiment_FRF.pdf', transparent=True, dpi=600)
 
 #%%
-fig, ax1 = plt.subplots(1, 1, sharex=True, figsize=(3.54, 2.84))
-ax1.semilogy(f, abs(power_in_wave.sum(axis=1)), lw=3, c='gray')
-ax1.semilogy(f, abs(power_in_wave[:, 1]))
-ax1.semilogy(f, abs(power_in_wave[:, 2]), '--')
-ax1.set_xlabel('frequency in Hz')
-ax1.set_ylabel(r'$P$ in W')
-
-ax1.legend(['total', 'axial', 'fluid'])
-plt.tight_layout()
-#plt.savefig('experiment_FRF_power.pdf', transparent=True, dpi=600)
 #%% compute analytical results from Muggleton Yan model
 kf = 2*np.pi*f/(water[0]/water[1])**0.5
                 

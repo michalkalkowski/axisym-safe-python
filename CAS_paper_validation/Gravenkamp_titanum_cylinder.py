@@ -17,7 +17,7 @@ plt.style.use('/home/michal/Dropbox/plot_templates/jsv.mplstyle')
 
 from context import axisafe
 #%%
-lame_1, lame_2 = Misc.G_nu2lame(46.53e9, 0.302)
+lame_1, lame_2 = axisafe.misc.G_nu2lame(46.53e9, 0.302)
 titanium = [lame_1, lame_2, 4460, 0.0]
 oil = [2.634e9, 870, 0]
 
