@@ -13,16 +13,13 @@ import matplotlib.pyplot as plt
 from scipy.io import loadmat
 plt.style.use('/home/michal/Dropbox/plot_templates/jsv.mplstyle')
 
-import SAFE_mesh as sm
-import SAFE_core
-import SAFE_plot
-import Misc
+from context import axisafe
 #%%
-lame_1, lame_2 = Misc.cLcS2lame(4759, 2325, 8933)
+lame_1, lame_2 = axisafe.misc.cLcS2lame(4759, 2325, 8933)
 copper = [lame_1, lame_2, 8933, 0.00]
 water = [2.25e9, 1000, 0]
 h_long, h_short, PML_order, R_s, R_l, R_sl = \
-        sm.suggest_PML_parameters(0.0075, 8, copper, water, 1e3, 4e5, att=1)
+        axisafe.mesh.suggest_PML_parameters(0.0075, 8, copper, water, 1e3, 4e5, att=1)
 
 
 sets = [['water', 0.0, 0.0068, water, 'ALAX6'], 
@@ -31,12 +28,12 @@ sets = [['water', 0.0, 0.0068, water, 'ALAX6'],
         
 f = np.linspace(1e3, 4e5, 200, True)
 #%%
-mesh0 = sm.Mesh()
+mesh0 = axisafe.mesh.Mesh()
 mesh0.create(sets, f[-1], PML='water_a', 
              PML_props=[0.0075, np.round(h_short, 4), 6 + 7j])
 mesh0.assemble_matrices(n=0)
 
-pipe0 = SAFE_core.WaveElementAxisym(mesh0)
+pipe0 = axisafe.solver.WaveElementAxisym(mesh0)
 pipe0.solve(f)
 pipe0.energy_ratio()
 pipe0.k_propagating(100, 0.9)
