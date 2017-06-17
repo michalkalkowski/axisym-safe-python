@@ -15,17 +15,15 @@ import os
 from scipy.io import loadmat
 plt.style.use('/home/michal/Dropbox/plot_templates/jsv.mplstyle')
 
-import SAFE_mesh as sm
-import SAFE_core
-import Misc
+from context import axisafe
 #%%
-lame_1, lame_2 = Misc.cLcS2lame(5960, 3260, 7932)
+lame_1, lame_2 = axisafe.misc.cLcS2lame(5960, 3260, 7932)
 steel = [lame_1, lame_2, 7932, 0.000]
-lame_1i, lame_2i = Misc.cLcS2lame(4222.1, 2637.5, 2300)
+lame_1i, lame_2i = axisafe.misc.cLcS2lame(4222.1, 2637.5, 2300)
 concrete = [lame_1i, lame_2i, 2300, 0.000]
 
 h_long, h_short, PML_order, R_s, R_l, R_sl = \
-        sm.suggest_PML_parameters(0.01, 6, steel, 
+        axisafe.mesh.suggest_PML_parameters(0.01, 6, steel, 
                                   concrete, 100, 2e5, 
                                   att=100, alpha=6, beta=7)
 
@@ -36,45 +34,45 @@ sets = [['steel', 0, 0.01, steel, 'SLAX6'],
 f = np.linspace(1, 2e5, 100, True)
 #%%
 #%%
-mesh0 = sm.Mesh()
+mesh0 = axisafe.mesh.Mesh()
 mesh0.create(sets, f[-1], PML='concrete', 
              PML_props=[0.01, np.round(h_short, 4), 6 + 7j])
 mesh0.assemble_matrices(n=0)
 
-rod0 = SAFE_core.WaveElementAxisym(mesh0)
+rod0 = axisafe.solver.WaveElementAxisym(mesh0)
 rod0.solve(f)
 rod0.energy_ratio()
 rod0.k_propagating(200, 0.9)
 k_0 = np.copy(rod0.k_ready)
 #%%
-mesh1 = sm.Mesh()
+mesh1 = axisafe.mesh.Mesh()
 mesh1.create(sets, f[-1], PML='concrete', 
              PML_props=[0.01, np.round(h_short, 4), 6 + 7j])
 mesh1.assemble_matrices(n=1)
 
-rod1 = SAFE_core.WaveElementAxisym(mesh1)
+rod1 = axisafe.solver.WaveElementAxisym(mesh1)
 rod1.solve(f)
 rod1.energy_ratio()
 rod1.k_propagating(200, 0.9)
 k_1 = np.copy(rod1.k_ready)
 #%%
-mesh2 = sm.Mesh()
+mesh2 = axisafe.mesh.Mesh()
 mesh2.create(sets, f[-1], PML='concrete', 
              PML_props=[0.01, np.round(h_short, 4), 6 + 7j])
 mesh2.assemble_matrices(n=2)
 
-rod2 = SAFE_core.WaveElementAxisym(mesh2)
+rod2 = axisafe.solver.WaveElementAxisym(mesh2)
 rod2.solve(f)
 rod2.energy_ratio()
 rod2.k_propagating(200, 0.9)
 k_2 = np.copy(rod2.k_ready)
 #%%
-mesh3 = sm.Mesh()
+mesh3 = axisafe.mesh.Mesh()
 mesh3.create(sets, f[-1], PML='concrete', 
              PML_props=[0.01, np.round(h_short, 4), 6 + 7j])
 mesh3.assemble_matrices(n=3)
 
-rod3 = SAFE_core.WaveElementAxisym(mesh3)
+rod3 = axisafe.solver.WaveElementAxisym(mesh3)
 rod3.solve(f)
 rod3.energy_ratio()
 rod3.k_propagating(200, 0.9)
