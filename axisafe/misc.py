@@ -1,13 +1,17 @@
 """
-==============================================================================
- Copyright (C) 2013--2014 Michal Kalkowski
+ ==============================================================================
+ Copyright (C) 2016--2017 Michal Kalkowski (MIT License)
  kalkowski.m@gmail.com
 
- This file contains some miscellaneous functions for SAFE/wave approach implemented in Python.
- Some parts are not very intuitive, but it is all at the development stage.
+ This is an init file for the axisafe package developed for simulating elastic
+ wave propagation in buried/submerged fluid-filled waveguides. The package is 
+ based on the publication:
+     Kalkowski MK et al. Axisymmetric semi-analytical finite elements for modelling 
+     waves in buried/submerged fluid-filled waveguides. Comput Struct (2017), 
+     https://doi.org/10.1016/j.compstruc.2017.10.004
+
  ==============================================================================
 """
-
 from __future__ import print_function
 import numpy as np
 

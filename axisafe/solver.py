@@ -1,8 +1,16 @@
 """
-Created on Mon Jul 25 17:05:28 2016
-Core functions of SAFE calculations
+ ==============================================================================
+ Copyright (C) 2016--2017 Michal Kalkowski (MIT License)
+ kalkowski.m@gmail.com
 
-@author: MKK
+ This is an init file for the axisafe package developed for simulating elastic
+ wave propagation in buried/submerged fluid-filled waveguides. The package is 
+ based on the publication:
+     Kalkowski MK et al. Axisymmetric semi-analytical finite elements for modelling 
+     waves in buried/submerged fluid-filled waveguides. Comput Struct (2017), 
+     https://doi.org/10.1016/j.compstruc.2017.10.004
+
+ ==============================================================================
 """
 from __future__ import print_function
 import scipy.sparse as sps
@@ -279,8 +287,8 @@ class WaveElementAxisym(object):
             if ER_threshold != 0:
                 k[self.er > ER_threshold] = 0
             k[k.real < 0] = 0
-#            k[k.imag > 1e-7] = 0
-            #k[k.imag > 1e-3] = 0
+            # only positive going waves are of interest so:
+            k[k.imag > .1] = 0
             self.propagating_indices = np.where(~(k == 0).all(0))[0]
             # create a propagating wavenumbers array (remove the zero columns)
             self.k_ready = k[:, self.propagating_indices]

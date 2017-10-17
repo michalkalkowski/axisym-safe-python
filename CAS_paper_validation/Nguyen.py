@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Tue Mar  7 22:27:20 2017
-
 Validation of SAFE routines with spectral elements
-Steel rod in concrete, following Nguyen et el.
-
-@author: michal
+:Waves in a steel rod embedded in concrete:
+    
+Comparison between axisafe and:
+Nguyen, K.L., Treyssède, F., Hazard, C., 2015. Numerical modeling of 
+three-dimensional open elastic waveguides combining semi-analytical finite element 
+and perfectly matched layer methods. Journal of Sound and Vibration 344, 158–178. 
+doi:10.1016/j.jsv.2014.12.032
+    
+@author: Michal K Kalkowski, kalkowski.m@gmail.com
+Copyright (c) 2017 Michal Kalkowski (MIT license)
 """
 #%%
 import numpy as np
@@ -77,20 +82,20 @@ rod3.solve(f)
 rod3.energy_ratio()
 rod3.k_propagating(200, 0.9)
 k_3 = np.copy(rod3.k_ready)
-#%%
+#%% load data from literature
 cp_duan = np.genfromtxt('reference/duan/duan.csv', delimiter=',', skip_header=2)
 att_duan = np.genfromtxt('reference/duan/attenuation.csv', delimiter=',', skip_header=2)
 
 cp_nguyen = loadmat('reference/nguyen/cp.mat')
 att_nguyen = loadmat('reference/nguyen/att.mat')
-#%%
-# Plot results
-for results_arrray in [k_0, k_1, k_2, k_3]:
-    results_arrray[results_arrray.real == 0] = np.nan + 1j*np.nan
-    results_arrray[results_arrray.imag == 0] = np.nan + 1j*np.nan
+
 cp_nguyen['final2'][cp_nguyen['final2'] == 0] = np.nan
 att_nguyen['final2'][att_nguyen['final2'] == 0] = np.nan
 att_duan[att_duan == 0] =np.nan
+#%% Plot results
+for results_arrray in [k_0, k_1, k_2, k_3]:
+    results_arrray[results_arrray.real == 0] = np.nan + 1j*np.nan
+    results_arrray[results_arrray.imag == 0] = np.nan + 1j*np.nan
 
 plt.rcParams.update({'figure.figsize': [7.48, 3]})
 fig, (ax1, ax2) = plt.subplots(1, 2, sharex=True)
@@ -232,14 +237,24 @@ leg = ax1.legend([lines0[-1], lines1[-1], lines2[-1]],
             loc=2, fontsize='x-small', frameon=True)
 leg.get_frame().set_facecolor('white')
 leg.get_frame().set_alpha(0.8)
-#for ax in [ax1, ax2]:
-#    ax.spines['right'].set_color('none')
-#    ax.spines['top'].set_color('none')
-#    ax.xaxis.set_ticks_position('bottom')
-#    ax.yaxis.set_ticks_position('left')
-#ax1.grid(lw=0.0)
-#ax2.grid(lw=0.0)
 
 plt.tight_layout()
 #plt.savefig('output_figures/steel_concrete.pdf', transparent=True, dpi=600)
 plt.show()
+#%%
+cp_final = 2e-3*np.pi*f.reshape(-1, 1)/np.column_stack((k_0, k_1, k_2, k_3)).real
+att_final = -20*np.log10(np.e)*np.column_stack((k_0, k_1, k_2, k_3)).imag
+np.savetxt('Fig3_phase_velocity.txt', np.column_stack((f/1e3, cp_final)).real, fmt='%.4e', 
+           delimiter=',', header='https://doi.org/10.1016/j.compstruc.2017.10.004 ' +\
+           'Fig.3\nFirst column - frequency in kHz, subsequent columns - phase velocities' +\
+           ' in km/s \nNote that some dispersion curves (columns) have a ' +\
+           'large number of NaNs \nThese represent points which do not satisfy chosen ' +\
+           'energy criteria and are marked as NaNs \nto facilitate creating ' +\
+           'discontinuous plots based on the energy and attenuation criteria.')
+np.savetxt('Fig3_attenuation.txt', np.column_stack((f/1e3, att_final)).real, fmt='%.4e', 
+           delimiter=',', header='https://doi.org/10.1016/j.compstruc.2017.10.004 ' +\
+           'Fig.3\nFirst column - frequency in kHz, subsequent columns - attenuation' +\
+           ' in dB/m \nNote that some dispersion curves (columns) have a ' +\
+           'large number of NaNs \nThese represent points which do not satisfy chosen ' +\
+           'energy criteria and are marked as NaNs \nto facilitate creating ' +\
+           'discontinuous plots based on the energy and attenuation criteria.')

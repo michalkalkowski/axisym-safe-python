@@ -3,11 +3,14 @@
 """
 Created on Fri Feb 24 22:39:30 2017
 Validation of SAFE routines with spectral elements (fluid PML)
-Waces in a titanum bar submerged in oil
+:Waves in a titanum bar submerged in oil:
+    
+Comparison between axisafe and:
 Hauke Gravenkamp, Carolin Birk, Chongmin Song, Numerical modeling of elastic waveguides coupled to infinite fluid media using exact boundary conditions, Computers & Structures, Volume 141, August 2014, Pages 36-45, ISSN 0045-7949, http://dx.doi.org/10.1016/j.compstruc.2014.05.010.
 (http://www.sciencedirect.com/science/article/pii/S0045794914001242)
 
-@author: michal
+@author: Michal K Kalkowski, kalkowski.m@gmail.com
+Copyright (c) 2017 Michal Kalkowski (MIT license)
 """
 #%%
 import numpy as np
@@ -89,7 +92,7 @@ disp, = [ax1.plot(cp_HG['xf'][:, 12:], cp_HG['yf'][:, 12:], 'o',
          mec='tab:olive', mfc='none', markevery=8)]
 mymodel, = [ax1.plot(f/1e6, cp, c='C1', lw=2)]
 
-ax2.plot(att_HG['xf'][:, :12], att_HG['yf'][:, :12], '-', 
+ax2.plot(att_HG['xf'][:, :12], att_HG['yf'][:, :12], 's', 
          c='C0', mfc='None', markevery=8)
 ax2.plot(att_HG['xf'][:, 12:], att_HG['yf'][:, 12:], 'o', 
          mec='tab:olive', mfc='none', markevery=8)
@@ -110,3 +113,8 @@ ax1.set_ylabel('phase velocity in km/s')
 ax2.set_ylabel('attenuation in dB/m')
 plt.tight_layout()
 #plt.savefig('output_figures/tit_in_oil.pdf', dpi=600)
+#%%
+np.savetxt('Fig4_phase_velocity.txt', np.column_stack((f/1e6, cp)).real, fmt='%.4e', 
+           delimiter=',', header='https://doi.org/10.1016/j.compstruc.2017.10.004 Fig.4\nFirst column - frequency in MHz, subsequent columns - phase velocities in km/s')
+np.savetxt('Fig4_attenuation.txt', np.column_stack((f/1e6, att)).real, fmt='%.4e', 
+           delimiter=',', header='https://doi.org/10.1016/j.compstruc.2017.10.004 Fig.4\nFirst column - frequency in MHz, subsequent columns - attenuations in dB/m')

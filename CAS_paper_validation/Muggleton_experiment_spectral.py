@@ -1,10 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Fri Feb 24 22:39:30 2017
 Validation of SAFE routines with spectral elements
-Torsional waves in a cast iron pipe buried in sand
-@author: michal
+:Waves in a water-filled MDPE pipe buried in soil:
+    
+Comparison between axisafe and:
+- Muggleton, J.M., Brennan, M.J., Linford, P.W., 2004. Axisymmetric wave propagation
+in fluid-filled pipes: wavenumber measurements in in vacuo and buried pipes. 
+Journal of Sound and Vibration 270, 171–190. doi:10.1016/S0022-460X(03)00489-9
+- Gao, Y., Sui, F., Muggleton, J.M., Yang, J., 2016. Simplified dispersion 
+relationships for fluid-dominated axisymmetric wave motion in buried fluid-filled 
+pipes. Journal of Sound and Vibration 375, 386–402. doi:10.1016/j.jsv.2016.04.012    
+    
+@author: Michal K Kalkowski, kalkowski.m@gmail.com
+Copyright (c) 2017 Michal Kalkowski (MIT license)
 """
 #%%
 import numpy as np
@@ -13,7 +22,6 @@ from scipy.io import loadmat
 plt.style.use('jsv.mplstyle')
 
 from context import axisafe
-import Muggleton_Yan_model as Jens_model
 #%%
 lame_1, lame_2 = axisafe.misc.young2lame(2e9, 0.4)
 mdpe = [lame_1, lame_2, 900, 0.06]
@@ -40,17 +48,9 @@ pipe0.energy_ratio()
 pipe0.k_propagating(15, 0.935)
 k_0 = np.copy(pipe0.k_ready)
 
-#%%
-#%% compute analytical results from Muggleton Yan model
-kf = 2*np.pi*f/(water[0]/water[1])**0.5
-                
-k1_jen_16 = Jens_model.k1_my(water[0], 0.0845, 1.6e9*(1 + 0.06j), 0.011, 
-                             2*np.pi*f, 900, soil[0], soil[1], soil[2], kf)
-k1_jen_20 = Jens_model.k1_my(water[0], 0.0845, 2e9*(1 + 0.06j), 0.011, 
-                             2*np.pi*f, 900, soil[0], soil[1], soil[2], kf)
-
+#%% Data from Yan et al. 2016
 Jens_compact = loadmat('reference/yan_muggleton_2016/compact_coupling.mat')
-#%% From Jen Muggleton's torsional waves paper in JSV 2016
+#%% Data from Muggleton et al. 2004
 Jens = np.genfromtxt('reference/muggleton_2002/Jens_exp_results.txt',
                       skip_header=1)
      
@@ -79,3 +79,16 @@ ax1.grid(lw=0.)
 ax2.grid(lw=0.)
 plt.tight_layout()
 #plt.savefig('output_figures/plastic_pipe_in_soil.pdf', transparent=True, dpi=600)
+
+#%%
+k = k_0[:, 2].real
+att = -20*np.log10(np.e)*k_0[:, 2].imag
+
+np.savetxt('Fig6_wavenumber.txt', np.column_stack((f, k)).real, fmt='%.4e', 
+           delimiter=',', header='https://doi.org/10.1016/j.compstruc.2017.10.004 ' +\
+           'Fig.6\nFirst column - frequency in Hz, second column - real wavenumber' +\
+           ' in rad/m')
+np.savetxt('Fig6_attenuation.txt', np.column_stack((f, att)).real, fmt='%.4e', 
+           delimiter=',', header='https://doi.org/10.1016/j.compstruc.2017.10.004 ' +\
+           'Fig.6\nFirst column - frequency in Hz, second column - attenuation' +\
+           ' in dB/m')

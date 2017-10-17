@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Fri Feb 24 22:39:30 2017
 Validation of SAFE routines with spectral elements
-Torsional waves in a cast iron pipe buried in sand
-@author: michal
+:Waves in a water-filled MDPE pipe submerged in water:
+    
+Comparison between axisafe and:
+Muggleton, J.M., Brennan, M.J., 2004. Leak noise propagation and attenuation in 
+submerged plastic water pipes. Journal of Sound and Vibration 278, 527–537. 
+doi:10.1016/j.jsv.2003.10.052
+    
+@author: Michal K Kalkowski, kalkowski.m@gmail.com
+Copyright (c) 2017 Michal Kalkowski (MIT license)
 """
 #%%
 import numpy as np
@@ -13,8 +19,6 @@ from scipy.io import loadmat
 plt.style.use('jsv.mplstyle')
 
 from context import axisafe
-import Muggleton_Yan_model as Jens_model
-
 #%%
 lame_1, lame_2 = axisafe.misc.young2lame(2e9, 0.4)
 mdpe = [lame_1, lame_2, 900, 0.06]
@@ -49,14 +53,7 @@ pipe1.solve(f)
 pipe1.energy_ratio()
 pipe1.k_propagating(15, 1)
 k_1 = np.copy(pipe1.k_ready)
-#%%
-#%% compute analytical results from Muggleton Yan model
-kf = 2*np.pi*f/(water[0]/water[1])**0.5
-                
-k1_jen_water = Jens_model.k1_2004(water[0], 0.0845, 2e9*(1 + 0.06j), 0.011, 
-                             2*np.pi*f, 900, water[0], 0, 1000, kf)
-
-#%% From Jen Muggleton's torsional waves paper in JSV 2016
+#%% Data from Muggleton et al. 2004
 Jens = loadmat('reference/muggleton_2004/JMM_data.mat')
 #%%   5
 fig, (ax1, ax2) = plt.subplots(1, 2, sharex=True, figsize=(7.48, 3))
@@ -94,4 +91,15 @@ ax2.grid(lw=0.)
 plt.tight_layout()
 #plt.savefig('output_figures/plastic_pipe_in_water.pdf', transparent=True, dpi=600)
 
-#%% 
+#%%
+k = np.c_[k_0[:, 0], k_1[:, 0]].real
+att = -20*np.log10(np.e)*np.c_[k_0[:, 0], k_1[:, 0]].imag
+
+np.savetxt('Fig7_wavenumber.txt', np.column_stack((f, k)).real, fmt='%.4e', 
+           delimiter=',', header='https://doi.org/10.1016/j.compstruc.2017.10.004 ' +\
+           'Fig.7\nFirst column - frequency in Hz, real wavenumber (in water) in rad/m, ' +\
+           ' real wavenumber (in air) in rad/m')
+np.savetxt('Fig7_attenuation.txt', np.column_stack((f, att)).real, fmt='%.4e', 
+           delimiter=',', header='https://doi.org/10.1016/j.compstruc.2017.10.004 ' +\
+           'Fig.7\nFirst column - frequency in Hz, attenuation (in water) in dB/m' +\
+           ' attenuation (in air) in dB/m')

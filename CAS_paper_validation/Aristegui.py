@@ -3,14 +3,19 @@
 """
 Created on Fri Feb 24 22:39:30 2017
 Validation of SAFE routines with spectral elements
-water filled copper pipe in water
-http://dx.doi.org/10.1016/S0041-624X(01)00064-6
-@author: michal
+:Water filled copper pipe in water:
+
+Comparison between axisafe and:
+C. Aristégui, M.J.S. Lowe, P. Cawley, Guided waves in fluid-filled pipes surrounded 
+by different fluids, In Ultrasonics, Volume 39, Issue 5, 2001, Pages 367-375, 
+https://doi.org/10.1016/S0041-624X(01)00064-6.
+
+@author: Michal K Kalkowski, kalkowski.m@gmail.com
+Copyright (c) 2017 Michal Kalkowski (MIT license)
 """
 #%%
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.io import loadmat
 plt.style.use('jsv.mplstyle')
 
 from context import axisafe
@@ -87,3 +92,21 @@ plt.tight_layout()
 #fig.savefig('output_figures/copper_pipe.pdf', transparent=True, dpi=600)
 
 #%%
+cg = 1e-3*np.diff(2*np.pi*f.reshape(-1, 1), axis=0)/np.diff(k_00, axis=0)
+ff = f[1:]/1e6
+
+att = -20*np.log10(np.e)*k_00.imag[1:]
+np.savetxt('Fig5_group_velocity.txt', np.column_stack((ff, cg)).real, fmt='%.4e', 
+           delimiter=',', header='https://doi.org/10.1016/j.compstruc.2017.10.004 ' +\
+           'Fig.5\nFirst column - frequency in MHz, subsequent columns - group velocities' +\
+           ' in km/s \nNote that some dispersion curves (columns) have a ' +\
+           'large number of NaNs \nThese represent points which do not satisfy chosen ' +\
+           'energy criteria and are marked as NaNs \nto facilitate creating ' +\
+           'discontinuous plots based on the energy and attenuation criteria.')
+np.savetxt('Fig5_attenuation.txt', np.column_stack((ff, att)).real, fmt='%.4e', 
+           delimiter=',', header='https://doi.org/10.1016/j.compstruc.2017.10.004 ' +\
+           'Fig.5\nFirst column - frequency in MHz, subsequent columns - attenuation' +\
+           ' in dB/m \nNote that some dispersion curves (columns) have a ' +\
+           'large number of NaNs \nThese represent points which do not satisfy chosen ' +\
+           'energy criteria and are marked as NaNs \nto facilitate creating ' +\
+           'discontinuous plots based on the energy and attenuation criteria.')
