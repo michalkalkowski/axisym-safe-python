@@ -25,7 +25,7 @@ concrete = [lame_1i, lame_2i, 2300, 0.000]
 h_long, h_short, PML_order, R_s, R_l, R_sl = \
         axisafe.mesh.suggest_PML_parameters(0.01, 6, steel, 
                                   concrete, 100, 2e5, 
-                                  att=100, alpha=6, beta=7)
+                                  att=10, alpha=6, beta=7)
 
 sets = [['steel', 0, 0.01, steel, 'SLAX6'], 
         ['concrete', 0.01, np.round(h_short, 4), concrete, 'SLAX6_PML', PML_order]]

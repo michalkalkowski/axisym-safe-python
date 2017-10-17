@@ -29,7 +29,7 @@ def suggest_PML_parameters(PML_start, wavelenghts_within, waveguide_material,
         waveguide_material : list with properties of the waveguide (as defined for sets)
         surr_material : list with properties of the surrounding medium (as defined for sets)
         low_f : low frequency limit
-        high_f : high frequency limie
+        high_f : high frequency limit
         alpha : exponential profile parameter (controlling shortening of the wavelength)
         beta : exponential profile parameter (controlling attenuation)
         att : assumed imaginary part of the propagating wavenumber
