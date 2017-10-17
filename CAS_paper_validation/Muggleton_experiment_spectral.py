@@ -10,7 +10,7 @@ Torsional waves in a cast iron pipe buried in sand
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.io import loadmat
-plt.style.use('/home/michal/Dropbox/plot_templates/jsv.mplstyle')
+plt.style.use('jsv.mplstyle')
 
 from context import axisafe
 import Muggleton_Yan_model as Jens_model

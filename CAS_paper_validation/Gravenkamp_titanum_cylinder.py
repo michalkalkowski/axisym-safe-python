@@ -13,7 +13,7 @@ Hauke Gravenkamp, Carolin Birk, Chongmin Song, Numerical modeling of elastic wav
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.io import loadmat
-plt.style.use('/home/michal/Dropbox/plot_templates/jsv.mplstyle')
+plt.style.use('jsv.mplstyle')
 
 from context import axisafe
 #%%
