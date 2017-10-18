@@ -42,8 +42,11 @@ Publication
 =========
 
 Full bibliographic details of the parent publication are:
-Kalkowski MK et al. Axisymmetric semi-analytical finite elements for modelling waves in buried/submerged fluid-filled waveguides. Comput Struct (2017), https://doi.org/10.1016/j.compstruc.2017.10.004
+
+**Kalkowski MK et al. Axisymmetric semi-analytical finite elements for modelling waves in buried/submerged fluid-filled waveguides. Comput Struct (2017), https://doi.org/10.1016/j.compstruc.2017.10.004**
 
 Whenever you use this code, please cite the above mentioned paper as an attribution to the authors.
 
+Request
+=========
 Please note that this software is written by an engineer, not a programmer, and is far from ideal from the software engineering perspective. For this reason, it is very much open to improvement and any contribution is more than welcome.
