@@ -49,4 +49,4 @@ Whenever you use this code, please cite the above mentioned paper as an attribut
 
 Request
 =========
-Please note that this software is written by an engineer, not a programmer, and is far from ideal from the software engineering perspective. For this reason, it is very much open to improvement and any contribution is more than welcome.
+Please note that this software is written by a mechanical engineer, not a programmer, and is far from ideal from the software engineering perspective. For this reason, it is very much open to improvement and any contribution is more than welcome.
