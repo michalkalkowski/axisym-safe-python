@@ -64,7 +64,7 @@ class WaveElementAxisym(object):
         matrix T, respective matrices which are skew-symmetric become symmetric
         as the whole eigensystem does.
         """
-        T = sps.diags((self.Mesh.Tdiag))
+        T = sps.diags(self.Mesh.Tdiag, offset=0)
         self.K2_hat = T.dot(self.Mesh.K2).dot(T.conj())/(-1j)
         self.K3_hat = T.dot(self.Mesh.K3).dot(T.conj())/(-1j)
         self.KF_hat = T.dot(self.Mesh.KF).dot(T.conj())/(-1j)
