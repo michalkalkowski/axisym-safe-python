@@ -13,6 +13,14 @@ is allowed.
 A few examples corresponding to the cases considered in the aforementioned paper
 are also included.
 
+The code was written ant tested for:
+* Python 3.5
+* numpy 1.12.1
+* scipy 0.19.0
+* matplotlib 2.0.2
+
+Whilst it should work fine with older versions as well, plotting code including in the example scripts may not execute owing to changes in color definition in matplotlib. This does not compromise the core functionality of the package.
+
 License
 =======
 
