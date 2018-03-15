@@ -55,6 +55,10 @@ Kalkowski MK et al. **Axisymmetric semi-analytical finite elements for modelling
 
 Whenever you use this code, please cite the above mentioned paper as an attribution to the authors.
 
+Erratum
+=========
+An ambiguity in the fluid element equations became apparent. Eq. (35) ommits the $\rho_f$ factor that multiplies both terms in the virtual work equation. This ommision may be not recalled when coupling to the solid part, leading to erroneous matrices. To resolve this, all matrices related to acoustic elements should be multiplied by $\rho_f$, which would be best done at element integration stage. Practically, this means adding the $\rho_f$ factor to all matrices in Eq. (24).
+
 Request
 =========
 Please note that this software is written by a mechanical engineer, not a programmer, and is far from ideal from the software engineering perspective. For this reason, it is very much open to improvement and any contribution is more than welcome.
