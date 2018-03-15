@@ -3,13 +3,15 @@
  Copyright (C) 2016--2017 Michal Kalkowski (MIT License)
  kalkowski.m@gmail.com
 
- This is an init file for the axisafe package developed for simulating elastic
+ This is a part of the axisafe package developed for simulating elastic
  wave propagation in buried/submerged fluid-filled waveguides. The package is 
  based on the publication:
      Kalkowski MK et al. Axisymmetric semi-analytical finite elements for modelling 
      waves in buried/submerged fluid-filled waveguides. Comput Struct (2017), 
      https://doi.org/10.1016/j.compstruc.2017.10.004
 
+This file contains WaveElement class that defined the waveguide, stores the
+mesh and calculates wave characteristics of interest.
  ==============================================================================
 """
 from __future__ import print_function
