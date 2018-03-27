@@ -57,7 +57,11 @@ Whenever you use this code, please cite the above mentioned paper as an attribut
 
 Erratum
 =========
-An ambiguity in the fluid element equations became apparent. Eq. (35) ommits the $\rho_f$ factor that multiplies both terms in the virtual work equation. This ommision may be not recalled when coupling to the solid part, leading to erroneous matrices. To resolve this, all matrices related to acoustic elements should be multiplied by $\rho_f$, which would be best done at element integration stage. Practically, this means adding the $\rho_f$ factor to all matrices in Eq. (24).
+An ambiguity in the fluid element equations in the published version of the paper became apparent. Eq. (35) ommits the $\rho_f$ factor that multiplies both terms in the virtual work equation. This ommision may be not recalled unless one considers structural acoustic coupling. The code has always preserved the dimensions appropriately. 
+
+I no short, all matrices related to acoustic elements (Eq. (24)) should be multiplied by $\rho_f$, which would be best done at element integration stage. Practically, this means adding the $\rho_f$ factor to all matrices in Eq. (24). 
+
+As mentioned this is an ommision in the printed version of the equations and not in the implementation.
 
 Request
 =========
